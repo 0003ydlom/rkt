@@ -24,7 +24,6 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
-	"syscall"
 
 	"github.com/hashicorp/errwrap"
 
@@ -189,7 +188,6 @@ func ExecSSH(execArgs []string) error {
 	// prepare args for ssh invocation
 	keyFile := sshPrivateKeyPath()
 	args := []string{
-		"ssh",
 		"-t",          // use tty
 		"-i", keyFile, // use keyfile
 		"-l", u.Username, // login as user
@@ -202,7 +200,9 @@ func ExecSSH(execArgs []string) error {
 
 	args = append(args, execArgs...)
 
-	// this should not return in case of success
-	err = syscall.Exec(sshPath, args, os.Environ())
-	return errwrap.Wrap(errors.New("cannot exec to ssh"), err)
+	sshCommand := exec.Command(sshPath, args...)
+	sshCommand.Stdout = os.Stdout
+	sshCommand.Stderr = os.Stderr
+	sshCommand.Env = os.Environ()
+	return sshCommand.Run()
 }

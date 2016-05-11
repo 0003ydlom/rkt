@@ -17,10 +17,14 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"strconv"
+	"strings"
 	"syscall"
 )
 
@@ -41,15 +45,38 @@ func readIntFromFile(path string) (i int, err error) {
 	return
 }
 
-func stop(signal syscall.Signal) int {
-	pid, err := readIntFromFile("ppid")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
-		return 1
+// Send signal to process and all its child processes
+func recursiveKill(signal syscall.Signal, pid int) int {
+
+	var outbuf bytes.Buffer
+	var rc int
+
+	cpidCmd := exec.Command("pgrep", "-P", strconv.Itoa(pid))
+	cpidCmd.Stdout = &outbuf
+	cpidCmd.Run()
+	cpidsStr := strings.Split(outbuf.String(), "\n")
+
+	for i := 0; i < len(cpidsStr)-1; i++ {
+		cpid, _ := strconv.Atoi(cpidsStr[i])
+		rc = recursiveKill(signal, cpid)
+		if rc != 0 {
+			return rc
+		}
 	}
 
+	rc = stop(signal, pid)
+	if rc != 0 {
+		return rc
+	}
+
+	return 0
+
+}
+
+func stop(signal syscall.Signal, pid int) int {
+
 	if err := syscall.Kill(pid, signal); err != nil {
-		fmt.Fprintf(os.Stderr, "error sending %v: %v\n", signal, err)
+		fmt.Fprintf(os.Stderr, "error sending %v to %d: %v\n", signal, pid, err)
 		return 1
 	}
 
@@ -59,10 +86,18 @@ func stop(signal syscall.Signal) int {
 func main() {
 	flag.Parse()
 
-	signal := syscall.SIGTERM
-	if force {
-		signal = syscall.SIGKILL
+	pid, err := readIntFromFile("ppid")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
+		return
 	}
 
-	os.Exit(stop(signal))
+	if force {
+		recursiveKill(syscall.SIGKILL, pid)
+	} else {
+		os.Exit(stop(syscall.SIGTERM, pid))
+	}
+
+	return
+
 }

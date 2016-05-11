@@ -46,20 +46,32 @@ func readIntFromFile(path string) (i int, err error) {
 }
 
 func main() {
+
 	flag.Parse()
 
+	pid, err := readIntFromFile("pid")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
+		os.Exit(1)
+	}
+
 	if force {
-		if pid, err := readIntFromFile("pid"); err != nil {
-			fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
-			os.Exit(1)
-		} else if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
+		if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
 			fmt.Fprintf(os.Stderr, "error sending %v: %v\n", syscall.SIGKILL, err)
 			os.Exit(1)
 		}
 		return
 	}
 
-	// ExecSSH() should return only with error
-	log.Error(ssh.ExecSSH([]string{"systemctl", "halt"}))
-	os.Exit(2)
+	if err := ssh.ExecSSH([]string{"systemctl", "halt"}); err != nil {
+		fmt.Fprintf(os.Stderr, "error stopping process %d: %v\n", pid, err)
+		os.Exit(2)
+	}
+
+	// Wait for process to be killed
+	check, _ := syscall.Getpgid(pid)
+	for check > 0 {
+		check, _ = syscall.Getpgid(pid)
+	}
+
 }

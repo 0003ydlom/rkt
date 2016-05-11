@@ -72,8 +72,9 @@ func main() {
 		log.Fatal("--appname not set to correct value")
 	}
 
-	// ExecSSH() should return only with error
-	log.Error(ssh.ExecSSH(getAppexecArgs()))
+	if err := ssh.ExecSSH(getAppexecArgs()); err != nil {
+		fmt.Fprintf(os.Stderr, "cannot enter to pod (%v)\n", err)
+		os.Exit(2)
+	}
 
-	os.Exit(2)
 }
