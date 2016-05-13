@@ -56,8 +56,8 @@ func main() {
 	}
 
 	if force {
-		if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
-			fmt.Fprintf(os.Stderr, "error sending %v: %v\n", syscall.SIGKILL, err)
+		if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
+			fmt.Fprintf(os.Stderr, "error sending %v: %v\n", syscall.SIGTERM, err)
 			os.Exit(1)
 		}
 		return

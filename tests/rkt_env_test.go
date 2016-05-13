@@ -54,30 +54,30 @@ var envTests = []struct {
 		`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --interactive --inherit-env=true ^SLEEP^"`,
 		`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=VAR_OTHER"`,
 	},
-	{
-		`^RKT_BIN^ --insecure-options=image run --mds-register=false --set-env=TERM=dumb ^PRINT_TERM_HOST^`,
-		"TERM=dumb",
-		`^RKT_BIN^ --insecure-options=image run --mds-register=false --interactive --inherit-env=false ^SLEEP^`,
-		`/bin/sh -c "export TERM=dumb ; ^RKT_BIN^ enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=TERM"`,
-	},
-	{
-		`^RKT_BIN^ --insecure-options=image run --mds-register=false --set-env=TERM=^HOST_TERM^ ^PRINT_TERM_HOST^`,
-		"TERM=^HOST_TERM^",
-		`^RKT_BIN^ --insecure-options=image run --mds-register=false --interactive --inherit-env=false ^SLEEP^`,
-		`/bin/sh -c "^RKT_BIN^ enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=TERM"`,
-	},
-	{
-		`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --inherit-env=true ^PRINT_VAR_FROM_MANIFEST^"`,
-		"VAR_FROM_MANIFEST=manifest",
-		`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --interactive --inherit-env=true ^SLEEP^"`,
-		`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=VAR_FROM_MANIFEST"`,
-	},
-	{
-		`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --inherit-env=true --set-env=VAR_OTHER=setenv ^PRINT_VAR_OTHER^"`,
-		"VAR_OTHER=setenv",
-		`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --interactive --inherit-env=true --set-env=VAR_OTHER=setenv ^SLEEP^"`,
-		`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=VAR_OTHER"`,
-	},
+	//{
+	//	`^RKT_BIN^ --insecure-options=image run --mds-register=false --set-env=TERM=dumb ^PRINT_TERM_HOST^`,
+	//	"TERM=dumb",
+	//	`^RKT_BIN^ --insecure-options=image run --mds-register=false --interactive --inherit-env=false ^SLEEP^`,
+	//	`/bin/sh -c "export TERM=dumb ; ^RKT_BIN^ enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=TERM"`,
+	//},
+	//{
+	//	`^RKT_BIN^ --insecure-options=image run --mds-register=false --set-env=TERM=^HOST_TERM^ ^PRINT_TERM_HOST^`,
+	//	"TERM=^HOST_TERM^",
+	//	`^RKT_BIN^ --insecure-options=image run --mds-register=false --interactive --inherit-env=false ^SLEEP^`,
+	//	`/bin/sh -c "^RKT_BIN^ enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=TERM"`,
+	//},
+	//{
+	//	`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --inherit-env=true ^PRINT_VAR_FROM_MANIFEST^"`,
+	//	"VAR_FROM_MANIFEST=manifest",
+	//	`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --interactive --inherit-env=true ^SLEEP^"`,
+	//	`/bin/sh -c "export VAR_FROM_MANIFEST=host ; ^RKT_BIN^ --debug enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=VAR_FROM_MANIFEST"`,
+	//},
+	//{
+	//	`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --inherit-env=true --set-env=VAR_OTHER=setenv ^PRINT_VAR_OTHER^"`,
+	//	"VAR_OTHER=setenv",
+	//	`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug --insecure-options=image run --mds-register=false --interactive --inherit-env=true --set-env=VAR_OTHER=setenv ^SLEEP^"`,
+	//	`/bin/sh -c "export VAR_OTHER=host ; ^RKT_BIN^ --debug enter $(^RKT_BIN^ list --full|grep running|awk '{print $1}') /inspect --print-env=VAR_OTHER"`,
+	//},
 }
 
 func TestEnv(t *testing.T) {
