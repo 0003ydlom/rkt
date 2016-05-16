@@ -201,8 +201,6 @@ func ExecSSH(execArgs []string) error {
 	args = append(args, execArgs...)
 
 	sshCommand := exec.Command(sshPath, args...)
-	sshCommand.Stdout = os.Stdout
-	sshCommand.Stderr = os.Stderr
 	sshCommand.Env = os.Environ()
 	return sshCommand.Run()
 }
