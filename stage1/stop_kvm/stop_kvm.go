@@ -25,6 +25,7 @@ import (
 
 	rktlog "github.com/coreos/rkt/pkg/log"
 	"github.com/coreos/rkt/stage1/common/ssh"
+	"time"
 )
 
 var (
@@ -66,6 +67,14 @@ func main() {
 	if err := ssh.ExecSSH([]string{"systemctl", "halt"}); err != nil {
 		fmt.Fprintf(os.Stderr, "error stopping process %d: %v\n", pid, err)
 		os.Exit(2)
+	}
+
+	// Wait for process to be killed
+	check, _ := syscall.Getpgid(pid)
+	for check > 0 {
+		fmt.Println("check: ", check)
+		time.Sleep(1000000000)
+		check, _ = syscall.Getpgid(pid)
 	}
 
 }
