@@ -30,22 +30,22 @@ import (
 func StopPod(dir string, force bool, uuid *types.UUID) error {
 	s1v, err := getStage1InterfaceVersion(dir)
 	if err != nil {
-		return fmt.Errorf("error determining stage1 interface version: %v", err)
+		return fmt.Errorf("8error determining stage1 interface version: %v", err)
 	}
 
 	if !interfaceVersionSupportsStop(s1v) {
-		return fmt.Errorf("stop entrypoint not supported by stage1")
+		return fmt.Errorf("9stop entrypoint not supported by stage1")
 	}
 
 	s1rootfs := common.Stage1RootfsPath(dir)
 
 	if err := os.Chdir(dir); err != nil {
-		return fmt.Errorf("failed changing to dir: %v", err)
+		return fmt.Errorf("Afailed changing to dir: %v", err)
 	}
 
 	ep, err := getStage1Entrypoint(dir, stopEntrypoint)
 	if err != nil {
-		return fmt.Errorf("rkt stop not implemented for pod's stage1: %v", err)
+		return fmt.Errorf("Brkt stop not implemented for pod's stage1: %v", err)
 	}
 	args := []string{filepath.Join(s1rootfs, ep)}
 	debug("Execing %s", ep)

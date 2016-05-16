@@ -52,20 +52,20 @@ func main() {
 	fmt.Println("We're into")
 	pid, err := readIntFromFile("pid")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Derror reading pid: %v\n", err)
 		os.Exit(1)
 	}
 
 	if force {
 		if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
-			fmt.Fprintf(os.Stderr, "error sending %v: %v\n", syscall.SIGTERM, err)
+			fmt.Fprintf(os.Stderr, "Eerror sending %v: %v\n", syscall.SIGTERM, err)
 			os.Exit(1)
 		}
 		return
 	}
 
 	if err := ssh.ExecSSH([]string{"systemctl", "halt"}); err != nil {
-		fmt.Fprintf(os.Stderr, "error stopping process %d: %v\n", pid, err)
+		fmt.Fprintf(os.Stderr, "Ferror stopping process %d: %v\n", pid, err)
 		os.Exit(2)
 	}
 

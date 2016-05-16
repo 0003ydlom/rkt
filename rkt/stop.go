@@ -52,7 +52,7 @@ func runStop(cmd *cobra.Command, args []string) (exit int) {
 	for _, uuid := range args {
 		podUUID, err := resolveUUID(uuid)
 		if err != nil {
-			stderr.PrintE("stop: unable to resolve UUID: %v", err)
+			stderr.PrintE("1stop: unable to resolve UUID: %v", err)
 		} else {
 			podUUIDs = append(podUUIDs, podUUID)
 		}
@@ -62,26 +62,26 @@ func runStop(cmd *cobra.Command, args []string) (exit int) {
 		p, err := getPod(podUUID)
 		if err != nil {
 			errors++
-			stderr.PrintE("stop: cannot get pod", err)
+			stderr.PrintE("2stop: cannot get pod", err)
 		}
 
 		if !p.isRunning() {
-			stderr.Error(fmt.Errorf("stop: pod %q is not running", p.uuid))
+			stderr.Error(fmt.Errorf("3stop: pod %q is not running", p.uuid))
 			errors++
 			continue
 		}
 
-		stdout.Printf("StopPod start")
+		stdout.Printf("4StopPod start")
 		if err := stage0.StopPod(p.path(), flagForce, podUUID); err == nil {
 			stdout.Printf("%q", p.uuid)
 		} else {
-			stderr.PrintE(fmt.Sprintf("stop: error stopping %q", p.uuid), err)
+			stderr.PrintE(fmt.Sprintf("5stop: error stopping %q", p.uuid), err)
 			errors++
 		}
 	}
 
 	if errors > 0 {
-		stderr.Error(fmt.Errorf("stop: failed to stop %d pod(s)", errors))
+		stderr.Error(fmt.Errorf("6stop: failed to stop %d pod(s)", errors))
 		return 1
 	}
 
