@@ -63,14 +63,14 @@ func TestRktStop(t *testing.T) {
 		child := spawnOrFail(t, cmd)
 
 		// Sleep to make sure the pod is started
-		time.Sleep(10 * time.Second)
+		time.Sleep(30 * time.Second)
 
 		runCmd := fmt.Sprintf("%s %s %s", ctx.Cmd(), tt.cmd, podUUID)
 		t.Logf("Running test #%d, %s", i, runCmd)
 		runRktAndCheckRegexOutput(t, runCmd, fmt.Sprintf("^%q", podUUID))
 
 		// Sleep to make sure the pod is stopped
-		time.Sleep(10 * time.Second)
+		time.Sleep(30 * time.Second)
 
 		podInfo := getPodInfo(t, ctx, podUUID)
 		if podInfo.state != "exited" {
