@@ -71,7 +71,6 @@ func runStop(cmd *cobra.Command, args []string) (exit int) {
 			continue
 		}
 
-		stdout.Printf("4StopPod start")
 		if err := stage0.StopPod(p.path(), flagForce, podUUID); err == nil {
 			stdout.Printf("%q", p.uuid)
 		} else {

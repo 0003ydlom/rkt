@@ -56,7 +56,7 @@ func StopPod(dir string, force bool, uuid *types.UUID) error {
 
 	args = append(args, uuid.String())
 
-	fmt.Println("Ruszaj komende w calosci ", args[0], " ", args)
+	//fmt.Println("Ruszaj komende w calosci ", args[0], " ", args)
 	c := exec.Cmd{
 		Path:   args[0],
 		Args:   args,
