@@ -337,6 +337,7 @@ func startRktAsGidAndCheckOutput(t *testing.T, rktCmd, expectedLine string, gid 
 func runRktAndCheckRegexOutput(t *testing.T, rktCmd, match string) {
 	child := spawnOrFail(t, rktCmd)
 	child.Wait()
+	time.Sleep(5 * time.Second)
 
 	result, out, err := expectRegexWithOutput(child, match)
 	if err != nil || len(result) != 1 {
