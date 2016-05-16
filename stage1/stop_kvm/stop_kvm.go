@@ -49,6 +49,7 @@ func main() {
 
 	flag.Parse()
 
+	fmt.Println("We're into")
 	pid, err := readIntFromFile("pid")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error reading pid: %v\n", err)
