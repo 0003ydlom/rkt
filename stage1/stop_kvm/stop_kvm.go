@@ -68,10 +68,4 @@ func main() {
 		os.Exit(2)
 	}
 
-	// Wait for process to be killed
-	check, _ := syscall.Getpgid(pid)
-	for check > 0 {
-		check, _ = syscall.Getpgid(pid)
-	}
-
 }
