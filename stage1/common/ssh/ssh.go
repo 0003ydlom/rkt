@@ -30,6 +30,7 @@ import (
 	"github.com/coreos/rkt/common"
 	"github.com/coreos/rkt/networking/netinfo"
 	"github.com/coreos/rkt/pkg/lock"
+	"syscall"
 )
 
 const (
@@ -188,6 +189,7 @@ func ExecSSH(execArgs []string) error {
 	// prepare args for ssh invocation
 	keyFile := sshPrivateKeyPath()
 	args := []string{
+		"ssh",
 		"-t",          // use tty
 		"-i", keyFile, // use keyfile
 		"-l", u.Username, // login as user
@@ -200,7 +202,7 @@ func ExecSSH(execArgs []string) error {
 
 	args = append(args, execArgs...)
 
-	sshCommand := exec.Command(sshPath, args...)
-	sshCommand.Env = os.Environ()
-	return sshCommand.Run()
+	// this should not return in case of success
+	err = syscall.Exec(sshPath, args, os.Environ())
+	return errwrap.Wrap(errors.New("cannot exec to ssh"), err)
 }

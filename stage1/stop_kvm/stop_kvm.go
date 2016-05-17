@@ -63,9 +63,7 @@ func main() {
 		return
 	}
 
-	if err := ssh.ExecSSH([]string{"systemctl", "halt"}); err != nil {
-		fmt.Fprintf(os.Stderr, "Ferror stopping process %d: %v\n", pid, err)
-		os.Exit(2)
-	}
+	log.Error(ssh.ExecSSH([]string{"systemctl", "halt"}))
+	os.Exit(2)
 
 }
