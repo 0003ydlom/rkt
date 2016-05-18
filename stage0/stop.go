@@ -56,12 +56,10 @@ func StopPod(dir string, force bool, uuid *types.UUID) error {
 
 	args = append(args, uuid.String())
 
-	//fmt.Println("Ruszaj komende w calosci ", args[0], " ", args)
+	// STDOUT I STDERR ARE REMOVED
 	c := exec.Cmd{
-		Path:   args[0],
-		Args:   args,
-		Stdout: os.Stdout,
-		Stderr: os.Stderr,
+		Path: args[0],
+		Args: args,
 	}
 
 	return c.Run()
