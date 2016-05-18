@@ -340,7 +340,7 @@ func runRktAndCheckRegexOutput(t *testing.T, rktCmd, match string) {
 
 	result, out, err := expectRegexWithOutput(child, match)
 	if err != nil || len(result) != 1 {
-	//	t.Fatalf("%q regex must be found one time, Error: %v\nOutput: %v", match, err, out)
+		//	t.Fatalf("%q regex must be found one time, Error: %v\nOutput: %v", match, err, out)
 	}
 }
 
