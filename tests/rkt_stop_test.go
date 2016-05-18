@@ -70,7 +70,7 @@ func TestRktStop(t *testing.T) {
 		spawnOrFail(t, runCmd)
 
 		// Sleep to make sure the pod is stopped
-		time.Sleep(1 * time.Second)
+		time.Sleep(5 * time.Second)
 
 		podInfo := getPodInfo(t, ctx, podUUID)
 		if podInfo.state != "exited" {
