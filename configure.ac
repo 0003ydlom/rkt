@@ -402,7 +402,7 @@ RKT_IF_HAS_FLAVOR([${RKT_STAGE1_FLAVORS}], [kvm],
                                   KVM_HV_TAG='hv_lkvm',
                           [qemu],
                                   KVM_HV_TAG='hv_qemu',
-                          [AC_MSG_ERROR([*** Invalid value passed to --with-stage1-kvm-hypervisor; lkvm is the only supported tool right now])]))
+                          [AC_MSG_ERROR([*** Invalid value passed to --with-stage1-kvm-hypervisor; Choose between 'qemu' and 'lkvm'. 'lkvm' is default])]))
 
 ## Options specific to coreos/kvm flavors
 
