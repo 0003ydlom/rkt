@@ -107,7 +107,7 @@ AC_ARG_WITH([stage1-kvm-hypervisor],
             [AS_HELP_STRING([--with-stage1-kvm-hypervisor],
                             [hypervisor used by 'kvm' flavor; default and only option for now: 'lkvm'])],
 			    [RKT_STAGE1_KVM_HV="${withval}"],
-		            [RKT_STAGE1_KVM_HV='lkvm'])
+		            [RKT_STAGE1_KVM_HV='qemu'])
 
 ## STAGE1 - path to coreos pxe and its systemd version for kvm and coreos flavors
 
