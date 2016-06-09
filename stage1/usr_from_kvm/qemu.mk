@@ -24,8 +24,10 @@ $(call setup-stamp-file,QEMU_BIOS_BUILD_STAMP,/bios_build)
 $(call setup-stamp-file,QEMU_CONF_STAMP,/conf)
 $(call setup-stamp-file,QEMU_CLONE_STAMP,/clone)
 
+$(call setup-stamp-file,QEMU_DIR_CLEAN_STAMP2,/dir-clean)
 $(call setup-stamp-file,QEMU_DIR_CLEAN_STAMP,/dir-clean)
 $(call setup-clean-file,QEMU_CLEANMK,/src)
+$(call setup-clean-file,QEMU_CLEANMKB,/)
 $(call setup-filelist-file,QEMU_DIR_FILELIST,/dir)
 # QEMU_BIOS_BINARIES contains binaries to remove
 
@@ -55,6 +57,7 @@ $(call generate-deep-filelist,$(QEMU_DIR_FILELIST),$(QEMU_SRCDIR))
 
 # Cleaning
 $(call generate-clean-mk, $(QEMU_DIR_CLEAN_STAMP), $(QEMU_CLEANMK), $(QEMU_DIR_FILELIST), $(QEMU_SCRDIR))
+$(call generate-clean-mk, $(QEMU_DIR_CLEAN_STAMP2), $(QEMU_CLEANMKB), $(QEMU_BIOS_BINARIES), $(QEMU_TMPDIR))
 
 $(call generate-stamp-rule,$(QEMU_CONF_STAMP),$(QEMU_CLONE_STAMP),, \
 	$(call vb,vt,CONFIG EXT,qemu) \
