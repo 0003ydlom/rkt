@@ -24,13 +24,18 @@ $(call setup-stamp-file,QEMU_BIOS_BUILD_STAMP,/bios_build)
 $(call setup-stamp-file,QEMU_CONF_STAMP,/conf)
 $(call setup-stamp-file,QEMU_CLONE_STAMP,/clone)
 
+$(call setup-stamp-file,QEMU_DIR_CLEAN_STAMP,/dir-clean)
+$(call setup-clean-file,QEMU_CLEANMK,/src)
+$(call setup-filelist-file,QEMU_DIR_FILELIST,/dir)
+# QEMU_BIOS_BINARIES contains binaries to remove
+
 S1_RF_SECONDARY_STAMPS += $(QEMU_STAMP)
 S1_RF_INSTALL_FILES += $(QEMU_BINARY):$(QEMU_ACI_BINARY):-
 INSTALL_DIRS += \
     $(QEMU_SRCDIR) :- \
     $(QEMU_TMPDIR) :-
 
-$(call generate-stamp-rule,$(QEMU_STAMP),$(QEMU_CLONE_STAMP) $(QEMU_CONF_STAMP) $(QEMU_BUILD_STAMP) $(QEMU_ACI_BINARY) $(QEMU_BIOS_BUILD_STAMP),,)
+$(call generate-stamp-rule,$(QEMU_STAMP),$(QEMU_CLONE_STAMP) $(QEMU_CONF_STAMP) $(QEMU_BUILD_STAMP) $(QEMU_ACI_BINARY) $(QEMU_BIOS_BUILD_STAMP)) 
 
 $(QEMU_BINARY): $(QEMU_BUILD_STAMP)
 
@@ -40,10 +45,16 @@ $(call generate-stamp-rule,$(QEMU_BIOS_BUILD_STAMP),$(QEMU_CONF_STAMP),, \
   	  	cp $(QEMU_SRCDIR)/pc-bios/$$$${bios} $(S1_RF_ACIROOTFSDIR)/$$$${bios} $(call vl2,>/dev/null); \
     done)
 
-
 $(call generate-stamp-rule,$(QEMU_BUILD_STAMP),$(QEMU_CONF_STAMP),, \
     $(call vb,vt,BUILD EXT,qemu) \
 	$$(MAKE) $(call vl2,--silent) -C "$(QEMU_SRCDIR)" $(call vl2,>/dev/null))
+
+# Filelist
+$(QEMU_DIR_FILELIST): $(QEMU_BUILD_STAMP)
+$(call generate-deep-filelist,$(QEMU_DIR_FILELIST),$(QEMU_SRCDIR))
+
+# Cleaning
+$(call generate-clean-mk, $(QEMU_DIR_CLEAN_STAMP), $(QEMU_CLEANMK), $(QEMU_DIR_FILELIST), $(QEMU_SCRDIR))
 
 $(call generate-stamp-rule,$(QEMU_CONF_STAMP),$(QEMU_CLONE_STAMP),, \
 	$(call vb,vt,CONFIG EXT,qemu) \
