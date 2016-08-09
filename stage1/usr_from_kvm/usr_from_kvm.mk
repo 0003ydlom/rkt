@@ -3,13 +3,13 @@ $(call setup-tmp-dir,UFK_TMPDIR)
 
 UFK_INCLUDES := \
 	kernel.mk \
-	files.mk \
-	lkvm.mk
+	files.mk
 # This directory will be used by the build-usr.mk
 UFK_CBUDIR := $(UFK_TMPDIR)/cbu
 
 S1_RF_USR_STAMPS += $(UFK_CBU_STAMP)
-INSTALL_DIRS += $(UFK_CBUDIR):-
+INSTALL_DIRS += $(UFK_CBUDIR):- \
+	$(S1_RF_ACIROOTFSDIR)_kaczka:-
 
 $(call inc-many,$(UFK_INCLUDES))
 
@@ -23,5 +23,8 @@ CBU_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)
 CBU_FLAVOR := kvm
 
 $(call inc-one,../usr_from_coreos/build-usr.mk)
+
+HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_kaczka
+$(call inc-one,lkvm.mk)
 
 $(call undefine-namespaces,UFK)

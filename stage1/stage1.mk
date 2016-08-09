@@ -81,6 +81,7 @@ $(foreach f,$(STAGE1_FLAVORS), \
 $(call setup-stamp-file,_STAGE1_BUILT_ACI_STAMP_,built_aci)
 
 # List of all the ACIs that the build system will build
+# trzeba zmienic!!
 _STAGE1_ALL_ACI_ := $(foreach f,$(STAGE1_FLAVORS),$(STAGE1_ACI_IMAGE_$f))
 _STAGE1_BUILT_ACI_ := $(foreach f,$(STAGE1_BUILT_FLAVORS),$(STAGE1_ACI_IMAGE_$f))
 
