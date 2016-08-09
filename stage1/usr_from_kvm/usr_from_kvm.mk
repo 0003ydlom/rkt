@@ -23,8 +23,12 @@ CBU_FLAVOR := kvm
 
 $(call inc-one,../usr_from_coreos/build-usr.mk)
 
-HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_kaczka
-INSTALL_DIRS += $(HV_ACIROOTFSDIR):-
-$(call inc-one,lkvm.mk)
+
+TEST := lkvm
+
+$(foreach h,$(TEST), \
+	$(eval HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_$h) \
+	$(eval INSTALL_DIRS += $(HV_ACIROOTFSDIR):-) \
+	$(call inc-one,$h.mk))
 
 $(call undefine-namespaces,UFK)
