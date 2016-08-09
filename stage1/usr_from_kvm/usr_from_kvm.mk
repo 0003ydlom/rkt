@@ -24,10 +24,10 @@ CBU_FLAVOR := kvm
 $(call inc-one,../usr_from_coreos/build-usr.mk)
 
 
-TEST := lkvm qemu
+STAGE1_BUILT_KVM_HV := $(call commas-to-spaces,$(RKT_STAGE1_KVM_HV))
 
-$(foreach h,$(TEST), \
-	$(eval HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_$h) \
+$(foreach h,$(STAGE1_BUILT_KVM_HV), \
+	$(eval HV_ACIROOTFSDIR := $(UFK_TMPDIR)/rootfs_$h) \
 	$(eval INSTALL_DIRS += $(HV_ACIROOTFSDIR):-) \
 	$(call inc-one,$h.mk))
 
