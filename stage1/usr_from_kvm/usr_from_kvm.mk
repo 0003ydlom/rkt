@@ -8,8 +8,7 @@ UFK_INCLUDES := \
 UFK_CBUDIR := $(UFK_TMPDIR)/cbu
 
 S1_RF_USR_STAMPS += $(UFK_CBU_STAMP)
-INSTALL_DIRS += $(UFK_CBUDIR):- \
-	$(S1_RF_ACIROOTFSDIR)_kaczka:-
+INSTALL_DIRS += $(UFK_CBUDIR):-
 
 $(call inc-many,$(UFK_INCLUDES))
 
@@ -25,6 +24,7 @@ CBU_FLAVOR := kvm
 $(call inc-one,../usr_from_coreos/build-usr.mk)
 
 HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_kaczka
+INSTALL_DIRS += $(HV_ACIROOTFSDIR):-
 $(call inc-one,lkvm.mk)
 
 $(call undefine-namespaces,UFK)
