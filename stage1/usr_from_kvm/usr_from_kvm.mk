@@ -24,7 +24,7 @@ CBU_FLAVOR := kvm
 $(call inc-one,../usr_from_coreos/build-usr.mk)
 
 
-TEST := lkvm
+TEST := lkvm qemu
 
 $(foreach h,$(TEST), \
 	$(eval HV_ACIROOTFSDIR := $(S1_RF_ACIROOTFSDIR)_$h) \

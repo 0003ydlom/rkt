@@ -13,7 +13,7 @@ QEMU_CONFIGURATION_OPTS := --disable-bsd-user --disable-docs --disable-guest-age
     --disable-seccomp --disable-curl --disable-bluez --disable-cap-ng --disable-rbd --disable-libiscsi \
     --disable-libnfs --disable-smartcard --disable-libusb --disable-glusterfs --disable-archipelago --disable-vhdx \
     --disable-tcmalloc --disable-jemalloc --disable-debug-info --enable-virtfs --static --target-list=x86_64-softmmu
-QEMU_ACI_BINARY := $(S1_RF_ACIROOTFSDIR)/qemu
+QEMU_ACI_BINARY := $(HV_ACIROOTFSDIR)/qemu
 
 # Using 2.6.0 stable release from official repository
 QEMU_GIT := git://git.qemu-project.org/qemu.git
@@ -34,7 +34,7 @@ INSTALL_DIRS += \
     $(QEMU_TMPDIR) :-
 
 # Bios files needs to be removed (source will be removed by QEMU_DIR_CLEAN_STAMP)
-$(foreach bios, $(QEMU_BIOS_BINARIES), $(eval CLEAN_FILES += $(S1_RF_ACIROOTFSDIR)/${bios}))
+$(foreach bios, $(QEMU_BIOS_BINARIES), $(eval CLEAN_FILES += $(HV_ACIROOTFSDIR)/${bios}))
 
 $(call generate-stamp-rule,$(QEMU_STAMP),$(QEMU_CLONE_STAMP) $(QEMU_CONF_STAMP) $(QEMU_BUILD_STAMP) $(QEMU_ACI_BINARY) $(QEMU_BIOS_BUILD_STAMP) $(QEMU_DIR_CLEAN_STAMP),,)
 
@@ -44,7 +44,7 @@ $(QEMU_BINARY): $(QEMU_BUILD_STAMP)
 $(call generate-stamp-rule,$(QEMU_BIOS_BUILD_STAMP),$(QEMU_CONF_STAMP) $(UFK_CBU_STAMP),, \
   	for bios in $(QEMU_BIOS_BINARIES); do \
         $(call vb,vt,COPY BIOS,$$$${bios}) \
-  	  	cp $(QEMU_SRCDIR)/pc-bios/$$$${bios} $(S1_RF_ACIROOTFSDIR)/$$$${bios} $(call vl2,>/dev/null); \
+        cp $(QEMU_SRCDIR)/pc-bios/$$$${bios} $(HV_ACIROOTFSDIR)/$$$${bios} $(call vl2,>/dev/null); \
     done)
 
 $(call generate-stamp-rule,$(QEMU_BUILD_STAMP),$(QEMU_CONF_STAMP),, \
