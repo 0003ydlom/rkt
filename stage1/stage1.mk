@@ -172,6 +172,10 @@ $$(STAGE1_ACI_IMAGE_$1): $$(STAGE1_FSD_STAMP)
 
 endif
 
+$(info )
+$(info ------)
+$(info Flavor $1) \
+
 # The actual rule that builds the ACI. Additional dependencies are
 # above.
 
@@ -180,13 +184,9 @@ endif
 $$(call forward-vars,$$(STAGE1_ACI_IMAGE_$1), \
 	ACTOOL STAGE1_ACIDIR_$1)
 
-
-$$(call forward-vars,$$(STAGE1_ACI_IMAGE_kvm-lkvm), ACTOOL STAGE1_ACIDIR_kvm)
-$$(call forward-vars,$$(STAGE1_ACI_IMAGE_kvm-qemu), ACTOOL STAGE1_ACIDIR_kvm)
-
-$(info )
-$(info ------)
-$(info Flavor $1) \
+$(foreach i,$2, \
+$$(call forward-vars,$$(STAGE1_ACI_IMAGE_$1-$i), \
+	ACTOOL STAGE1_ACIDIR_$1))
 
 # If there are more 
 $(if $(strip $2), \
