@@ -148,15 +148,8 @@ ifeq ($$(STAGE1_COPY_SO_DEPS_$1),)
 $$(STAGE1_ACI_IMAGE_$1): $$(STAGE1_ALL_STAMPS_$1)
 
 # Same dependencies has to be fulfilled for every image in given flavor
-#$(foreach i,$2, \
-#$$(STAGE1_ACI_IMAGE_$1-$2): $$(STAGE1_ALL_STAMPS_$1) ; \
-#) 
-
-
-
-$$(STAGE1_ACI_IMAGE_kvm-lkvm): $$(STAGE1_ALL_STAMPS_kvm)
-$$(STAGE1_ACI_IMAGE_kvm-qemu): $$(STAGE1_ALL_STAMPS_kvm)
-
+$(foreach i,$2, \
+$$(eval $$(STAGE1_ACI_IMAGE_$1-$i): $$(STAGE1_ALL_STAMPS_$1)))
 
 else
 
@@ -208,6 +201,7 @@ $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
 endef
 
 
+# Overwriting rzeczy!!!!!
 STAGE1_IMAGES_kvm := lkvm qemu
 
 
