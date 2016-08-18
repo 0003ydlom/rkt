@@ -96,14 +96,14 @@ _STAGE1_BUILT_ACI_ := $(foreach f,$(STAGE1_BUILT_FLAVORS),$(STAGE1_ACI_IMAGE_$f)
 # needed by _STAGE1_BUILT_ACI_ variable and _STAGE1_ACI_RULE_ function
 $(foreach h,$(STAGE1_BUILT_KVM_HV), \
 	$(eval STAGE1_ACI_IMAGE_kvm-$h := $(TARGET_BINDIR)/stage1-kvm-$h.aci) \
-	$(eval STAGE1_IMAGES_kvm += $(STAGE1_ACI_IMAGE_kvm-$h)))
+	$(eval STAGE1_IMAGES_kvm += $h))
 
 # Replace stage1-flavor.aci with stage1-flavor-image1.aci,stage1-flavor-image2.aci,...
 # for every flavor with more than one image
 $(foreach f,$(STAGE1_BUILT_FLAVORS), \
 	$(if $(STAGE1_IMAGES_$f), \
 		$(eval _STAGE1_BUILT_ACI_ := \
-		$(subst $(STAGE1_ACI_IMAGE_$f), $(STAGE1_IMAGES_$f), $(_STAGE1_BUILT_ACI_)))))
+		$(subst $(STAGE1_ACI_IMAGE_$f), $(foreach i,$(STAGE1_IMAGES_$f),$(STAGE1_ACI_IMAGE_$f-$i)), $(_STAGE1_BUILT_ACI_)))))
 
 # The rootfs.mk file takes care of preparing the initial /usr contents
 # of the ACI rootfs of a specific flavor. Basically fills
@@ -165,10 +165,6 @@ $$(STAGE1_ACI_IMAGE_$1): $$(STAGE1_FSD_STAMP)
 
 endif
 
-$(info )
-$(info ------)
-$(info Flavor $1) \
-
 # The actual rule that builds the ACI. Additional dependencies are
 # above.
 
@@ -176,22 +172,17 @@ $(info Flavor $1) \
 # forward to every rule.
 $$(call forward-vars,$$(STAGE1_ACI_IMAGE_$1), \
 	ACTOOL STAGE1_ACIDIR_$1)
-
 $(foreach i,$2, \
 $$(call forward-vars,$$(STAGE1_ACI_IMAGE_$1-$i), \
 	ACTOOL STAGE1_ACIDIR_$1))
 
-# If there are more 
+# Prepare targets to build images 
 $(if $(strip $2), \
-	$(eval SUFFIX := $(foreach h,$2,$1-$h)), \
-	$(eval SUFFIX := $1))
+	$(eval IMG := $(foreach h,$2,$1-$h)), \
+	$(eval IMG := $1))
 
-$(info SUFFIX-$(SUFFIX)-JEDYNKA-$1-DWOJKA-$2)
-#SUFFIX :=
-
-# Rozwija zmienną STAGE1_ACI_IMAGE_SUFFIX ktorej nie ma, trzeba dodac, albo wpisac GNU make rule'a recznie
-$(foreach s,$(SUFFIX),
-$(info lecimy dla-$s[$(SUFFIX)])
+# Build images
+$(foreach s,$(IMG),
 $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
 	$(VQ) \
 	$(call vb,vt,ACTOOL,$$(call vsp,$$@)) \
@@ -199,12 +190,6 @@ $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
 )
 
 endef
-
-
-# Overwriting rzeczy!!!!!
-STAGE1_IMAGES_kvm := lkvm qemu
-
-
 
 $(foreach f,$(STAGE1_FLAVORS), \
 	$(eval $(call _STAGE1_ACI_RULE_,$f,$(STAGE1_IMAGES_$f))))
