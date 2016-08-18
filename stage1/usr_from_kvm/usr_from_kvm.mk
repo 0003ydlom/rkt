@@ -27,7 +27,7 @@ $(call inc-one,../usr_from_coreos/build-usr.mk)
 STAGE1_BUILT_KVM_HV := $(call commas-to-spaces,$(RKT_STAGE1_KVM_HV))
 
 $(foreach h,$(STAGE1_BUILT_KVM_HV), \
-	$(eval HV_ACIROOTFSDIR := $(UFK_TMPDIR)/rootfs_$h) \
+	$(eval HV_ACIROOTFSDIR := $(S1_RF_ACIDIR)/kvm-$h/rootfs) \
 	$(eval INSTALL_DIRS += $(HV_ACIROOTFSDIR):-) \
 	$(call inc-one,$h.mk))
 

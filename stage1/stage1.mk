@@ -181,12 +181,17 @@ $(if $(strip $2), \
 	$(eval IMG := $(foreach h,$2,$1-$h)), \
 	$(eval IMG := $1))
 
-# Build images
+# Build images. Common files are stored in STAGE1_ACIDIR_$1,
+# image specific files in STAGE1_ACIDIR_$1/flavor-image/...
 $(foreach s,$(IMG),
 $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
 	$(VQ) \
+	$(call vb,vt,SRAKA,$$(call vsp,$$@)) \
+	cp -r $(STAGE1_ACIDIR_$1)/rootfs $(STAGE1_ACIDIR_$1)/manifest $(STAGE1_ACIDIR_$1)/$s
+
+	$(VQ) \
 	$(call vb,vt,ACTOOL,$$(call vsp,$$@)) \
-	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)" "$$@"
+	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)/$s" "$$@"
 )
 
 endef
