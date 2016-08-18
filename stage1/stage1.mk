@@ -58,9 +58,9 @@
 # for the "rkt stop" command.
 # 
 # STAGE1_IMAGES_$(flavor) - list of stage1 images we want to build for
-# each flavor. If empty, single $(STAGE1_ACI_IMAGE_$f) will be built.
-# Variables $(STAGE1_ACI_IMAGE_$f-$(image)) will be used only for 
-# aci build rules. 
+# each flavor. Need to be parsed here. If empty, single $(STAGE1_ACI_IMAGE_$f)
+# will be built. Variables $(STAGE1_ACI_IMAGE_$f-$(image)) will be used
+# only for aci build rules.
 
 STAGE1_FLAVORS := $(call commas-to-spaces,$(RKT_STAGE1_ALL_FLAVORS))
 STAGE1_BUILT_FLAVORS := $(call commas-to-spaces,$(RKT_STAGE1_FLAVORS))
