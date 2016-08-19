@@ -185,13 +185,10 @@ $(if $(strip $2), \
 # image specific files in STAGE1_ACIDIR_$1/flavor-image/...
 $(foreach s,$(IMG),
 $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
-	$(VQ) \
-	$(call vb,vt,SRAKA,$$(call vsp,$$@)) \
-	cp -r $(STAGE1_ACIDIR_$1)/rootfs $(STAGE1_ACIDIR_$1)/manifest $(STAGE1_ACIDIR_$1)/$s
-
+	$(if $(strip $2),$(VQ) $(call vb,vt,COPY FILES,$$(call vsp,$s)) cp -r $(STAGE1_ACIDIR_$1)/rootfs $(STAGE1_ACIDIR_$1)/manifest $(STAGE1_ACIDIR_$1)/$s,)
 	$(VQ) \
 	$(call vb,vt,ACTOOL,$$(call vsp,$$@)) \
-	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)/$s" "$$@"
+	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)$(if $(strip $2),/$s,)" "$$@"
 )
 
 endef
