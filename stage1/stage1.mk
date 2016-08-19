@@ -188,7 +188,7 @@ $$(STAGE1_ACI_IMAGE_$s): $$(ACTOOL_STAMP) | $$(TARGET_BINDIR)
 	$(if $(strip $2),$(VQ) $(call vb,vt,COPY FILES,$$(call vsp,$s)) cp -r $(STAGE1_ACIDIR_$1)/rootfs $(STAGE1_ACIDIR_$1)/manifest $(STAGE1_ACIDIR_$1)/$s,)
 	$(VQ) \
 	$(call vb,vt,ACTOOL,$$(call vsp,$$@)) \
-	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)$(if $(strip $2),/$s,)" "$$@"
+	"$$(ACTOOL)" build --overwrite --owner-root "$$(STAGE1_ACIDIR_$1)$(if $(strip $2),/$s,)" "$(if $(filter 1,$(words $2)),$(STAGE1_ACI_IMAGE_$1),$$@)"
 )
 
 endef
